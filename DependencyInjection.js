@@ -1,7 +1,9 @@
 /**
+ * Simple service container
+ *
  * @type {Object}
  */
-var container = (function() {
+var serviceContainer = (function() {
   
   /**
    * @type {Object}
@@ -51,6 +53,7 @@ var container = (function() {
    */
   var gatherServices = function(list) {
     return list.map(function(key) {
+      console.log('gather dependency: ' + key);
       return publicInterface.get(key);
     });
   };
@@ -112,11 +115,11 @@ var container = (function() {
 
 /////// REGISTER DEPENDENCIES //////////
 
-container.register('first', {
+serviceContainer.register('first', {
   title: 'first dependency'
 });
 
-container.register('second', {
+serviceContainer.register('second', {
   title: 'second dependency'
 });
 
@@ -124,6 +127,6 @@ container.register('second', {
 
 /////// EXECUTE TEST //////////
 
-var myModule = container.process(function(/* first item */ first, /* second item */ second) {
+var myModule = serviceContainer.process(function(/* first item */ first, /* second item */ second) {
   console.log('I got my dependencies: ', first, second);
 });
