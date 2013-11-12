@@ -18,12 +18,16 @@ var serviceContainer = (function() {
     var stripCommentsRegex = /((\/\/.*$)|(\/\*[\s\S]*?\*\/))/mg,
         parseArgumentsRegex = /^function\s*[^\(]*\(\s*([^\)]*)\)/m,
         toArrayRegex = /,\s*/m;
-    
-    return target.toString()
+        
+    var argsString = target.toString()
       .replace(stripCommentsRegex, '')
-      .match(parseArgumentsRegex)[1]
-      .split(toArrayRegex)
-    ;
+      .match(parseArgumentsRegex)[1];
+      
+    if (argsString.length === 0) {
+      return [];
+    }
+    
+    return argsString.split(toArrayRegex);
   };
  
   /**
@@ -53,7 +57,6 @@ var serviceContainer = (function() {
    */
   var gatherServices = function(list) {
     return list.map(function(key) {
-      console.log('gather dependency: ' + key);
       return publicInterface.get(key);
     });
   };
@@ -68,6 +71,16 @@ var serviceContainer = (function() {
     }
   }
   
+  /**
+   * @param {Function} target
+   * @throws {Error}
+   */
+  var validateTargetIsFunction = function(target) {
+     if (toString.call(target) != '[object Function]') {
+        throw new Error('Target should be of type Function');
+     }
+  }
+  
   // return public interface
   return publicInterface = {
     
@@ -75,7 +88,7 @@ var serviceContainer = (function() {
      * @param {String} key
      * @param {Function|Object} service
      */
-    register: function(key, service) {
+    registerModule: function(key, service) {
       validateKeyIsString(key);
       validateServiceIsFunctionOrObject(service);
       
@@ -89,7 +102,8 @@ var serviceContainer = (function() {
     get: function(key) {
       validateHas(key);
       
-      return services[key];
+      var service = services[key];
+      return this.process(service);
     },
     
     /**
@@ -107,7 +121,9 @@ var serviceContainer = (function() {
      * @param {Function} target
      */
     process: function(target) {
-      target.apply(target, gatherServices(parseFunctionArguments(target)));
+      validateTargetIsFunction(target);
+      
+      return target.apply(target, gatherServices(parseFunctionArguments(target)));
     }
   }
 })();
@@ -115,12 +131,21 @@ var serviceContainer = (function() {
 
 /////// REGISTER DEPENDENCIES //////////
 
-serviceContainer.register('first', {
-  title: 'first dependency'
+serviceContainer.registerModule('first', function(second) {
+  console.log('I got my dependency: ', second);
+  
+  return {
+    title: 'first dependency',
+    dependency: second
+  };
 });
 
-serviceContainer.register('second', {
-  title: 'second dependency'
+serviceContainer.registerModule('second', function() {
+  console.log('I got no dependencies');
+  
+  return {
+    title: 'second dependency'
+  }
 });
 
 
