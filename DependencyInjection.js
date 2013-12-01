@@ -17,8 +17,8 @@ var Service = function(creator, doCache) {
   validateIsFunction(creator);
   
   this.creator = creator;
-  this.doCache = doCache === false ? false : true;
-}
+  this.doCache = doCache !== false;
+};
 
 /**
  * Simple service container
@@ -96,7 +96,7 @@ var serviceContainer = (function() {
     if (pi.has(key) === false) {
       throw new Error('No service with key: \'' + key + '\'');
     }
-  }
+  };
   
   /**
    * @param {Function} target
@@ -106,7 +106,7 @@ var serviceContainer = (function() {
      if (toString.call(target) != '[object Function]') {
         throw new Error('Target should be of type Function');
      }
-  }
+  };
   
   // define the public interface
   var pi = {
@@ -167,7 +167,7 @@ var serviceContainer = (function() {
       
       return target.apply(target, gatherServices(parseFunctionArguments(target)));
     }
-  }
+  };
   
   return pi;
 })();
