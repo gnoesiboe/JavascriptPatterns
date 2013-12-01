@@ -31,9 +31,9 @@ var myMan = new Man('Klaas');
  * Tests
  */
 
-console.log(myMan);
-console.log(myMan instanceof Man);
-console.log(myMan instanceof Human);
-console.log(myMan.__proto__ instanceof Human);
-console.log(myMan.__proto__.constructor === Man);
-console.log(myMan.getName());
+console.log(myMan); // output: { name: 'Klaas' }
+console.log(myMan instanceof Man); // output: true
+console.log(myMan instanceof Human); // output: true
+console.log(myMan.__proto__ instanceof Human); // output: true
+console.log(myMan.__proto__.constructor === Man); // output: true
+console.log(myMan.getName()); // output: Klaas

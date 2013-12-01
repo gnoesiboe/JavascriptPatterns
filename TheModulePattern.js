@@ -3,46 +3,46 @@
  *
  * @return {Object}
  */
-var countModule = (function() {
+var countModule = (function () {
 
-  /**
-   * @private
-   * @type {Number}
-   */
-  var _count = getDefaultCountValue();
-  
-  /**
-   * @private
-   * @return {Number}
-   */
-  var _getDefaultCountValue() = function {
-    return 0;
-  };
-  
-  return {
-  
     /**
-     * @public
+     * @private
      * @return {Number}
      */
-    getCount: function() {
-      return _count;
-    },
-    
+    var _getDefaultCountValue = function () {
+        return 0;
+    };
+
     /**
-     * @public
-     * Resets the counter
+     * @private
+     * @type {Number}
      */
-    incrementCount: function() {
-      _count++;
-    },
-    
-    /**
-     * @public
-     * Resets the counter
-     */
-    resetCount: function() {
-      _count = _getDefaultCountValue();
-    }
-  };
+    var _count = _getDefaultCountValue();
+
+    return {
+
+        /**
+         * @public
+         * @return {Number}
+         */
+        getCount: function () {
+            return _count;
+        },
+
+        /**
+         * @public
+         * Resets the counter
+         */
+        incrementCount: function () {
+            _count++;
+        },
+
+        /**
+         * @public
+         * Resets the counter
+         */
+        resetCount: function () {
+            _count = _getDefaultCountValue();
+        }
+    };
 })();

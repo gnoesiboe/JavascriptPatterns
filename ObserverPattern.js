@@ -25,7 +25,7 @@ var observer = (function() {
      */
     publish: function(event, params) {
       if (!_subscribers[event]) {
-        throw new Error('This publisher doesn\'t publish the event: ' + Event);
+        throw new Error('This publisher doesn\'t publish the event: ' + event);
       }
       
       var subscribers = _subscribers[event];
@@ -56,7 +56,7 @@ var observer = (function() {
       });
       
       _tokenCounter++;
-      return _token;
+      return token;
     },
     
     /**
